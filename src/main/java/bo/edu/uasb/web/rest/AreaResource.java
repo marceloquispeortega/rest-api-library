@@ -51,8 +51,7 @@ public class AreaResource {
         }
         Area result = areaService.save(area);
         return ResponseEntity.created(new URI("/api/areas/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString())).body(result);
     }
 
     /**
@@ -64,17 +63,18 @@ public class AreaResource {
      * or with status 500 (Internal Server Error) if the area couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @PutMapping("/areas")
+    @PutMapping("/areas/{id}")
     @Timed
-    public ResponseEntity<Area> updateArea(@Valid @RequestBody Area area) throws URISyntaxException {
+    public ResponseEntity<Area> updateArea(@PathVariable Long id, @Valid @RequestBody Area area)
+            throws URISyntaxException {
         log.debug("REST request to update Area : {}", area);
-        if (area.getId() == null) {
+        if (id == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        area.setId(id);
         Area result = areaService.save(area);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, area.getId().toString()))
-            .body(result);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, area.getId().toString()))
+                .body(result);
     }
 
     /**
