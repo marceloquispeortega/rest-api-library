@@ -19,8 +19,8 @@ export class AreaService {
         return this.http.post<IArea>(this.resourceUrl, area, { observe: 'response' });
     }
 
-    update(area: IArea): Observable<EntityResponseType> {
-        return this.http.put<IArea>(this.resourceUrl, area, { observe: 'response' });
+    update(id: number, area: IArea): Observable<EntityResponseType> {
+        return this.http.put<IArea>(`${this.resourceUrl}/${id}`, area, { observe: 'response' });
     }
 
     find(id: number): Observable<EntityResponseType> {

@@ -30,7 +30,7 @@ export class AreaUpdateComponent implements OnInit {
     save() {
         this.isSaving = true;
         if (this.area.id !== undefined) {
-            this.subscribeToSaveResponse(this.areaService.update(this.area));
+            this.subscribeToSaveResponse(this.areaService.update(this.area.id, this.area));
         } else {
             this.subscribeToSaveResponse(this.areaService.create(this.area));
         }
