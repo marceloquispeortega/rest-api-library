@@ -56,8 +56,7 @@ public class BookResource {
         }
         Book result = bookService.save(book);
         return ResponseEntity.created(new URI("/api/books/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString())).body(result);
     }
 
     /**
@@ -69,17 +68,18 @@ public class BookResource {
      * or with status 500 (Internal Server Error) if the book couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @PutMapping("/books")
+    @PutMapping("/books/{id}")
     @Timed
-    public ResponseEntity<Book> updateBook(@Valid @RequestBody Book book) throws URISyntaxException {
+    public ResponseEntity<Book> updateBook(@PathVariable Long id, @Valid @RequestBody Book book)
+            throws URISyntaxException {
         log.debug("REST request to update Book : {}", book);
-        if (book.getId() == null) {
+        if (id == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        book.setId(id);
         Book result = bookService.save(book);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, book.getId().toString()))
-            .body(result);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, book.getId().toString()))
+                .body(result);
     }
 
     /**
@@ -91,7 +91,8 @@ public class BookResource {
      */
     @GetMapping("/books")
     @Timed
-    public ResponseEntity<List<Book>> getAllBooks(Pageable pageable, @RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public ResponseEntity<List<Book>> getAllBooks(Pageable pageable,
+            @RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get a page of Books");
         Page<Book> page;
         if (eagerload) {
@@ -99,7 +100,8 @@ public class BookResource {
         } else {
             page = bookService.findAll(pageable);
         }
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, String.format("/api/books?eagerload=%b", eagerload));
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page,
+                String.format("/api/books?eagerload=%b", eagerload));
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
