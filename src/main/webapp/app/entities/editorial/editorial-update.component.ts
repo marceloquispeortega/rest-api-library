@@ -30,7 +30,7 @@ export class EditorialUpdateComponent implements OnInit {
     save() {
         this.isSaving = true;
         if (this.editorial.id !== undefined) {
-            this.subscribeToSaveResponse(this.editorialService.update(this.editorial));
+            this.subscribeToSaveResponse(this.editorialService.update(this.editorial.id, this.editorial));
         } else {
             this.subscribeToSaveResponse(this.editorialService.create(this.editorial));
         }

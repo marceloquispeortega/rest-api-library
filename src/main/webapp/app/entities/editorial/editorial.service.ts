@@ -19,8 +19,8 @@ export class EditorialService {
         return this.http.post<IEditorial>(this.resourceUrl, editorial, { observe: 'response' });
     }
 
-    update(editorial: IEditorial): Observable<EntityResponseType> {
-        return this.http.put<IEditorial>(this.resourceUrl, editorial, { observe: 'response' });
+    update(id: number, editorial: IEditorial): Observable<EntityResponseType> {
+        return this.http.put<IEditorial>(`${this.resourceUrl}/${id}`, editorial, { observe: 'response' });
     }
 
     find(id: number): Observable<EntityResponseType> {
