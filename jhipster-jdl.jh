@@ -1,0 +1,57 @@
+// Author: Lucio Marcelo Quispe Ortega
+// Email: marceloquispeortega@gmail.com
+
+DEFAULT_MIN_LENGTH = 1
+DEFAULT_MAX_LENGTH = 60
+DEFAULT_MIN_YEAR = 2000
+
+enum Language {
+    FRENCH, ENGLISH, SPANISH
+}
+
+entity Area {
+	code String minlength(DEFAULT_MIN_LENGTH) maxlength(DEFAULT_MAX_LENGTH) required
+	name String minlength(DEFAULT_MIN_LENGTH) maxlength(DEFAULT_MAX_LENGTH) required
+    description String
+}
+
+entity Country {
+    code String required
+	name String minlength(DEFAULT_MIN_LENGTH) maxlength(DEFAULT_MAX_LENGTH) required
+}
+
+entity Book {
+	title String minlength(DEFAULT_MIN_LENGTH) maxlength(DEFAULT_MAX_LENGTH) required
+    description String
+    isbn String
+    year Integer min(DEFAULT_MIN_YEAR)
+    language Language
+}
+
+entity Author {
+	name String minlength(DEFAULT_MIN_LENGTH) maxlength(DEFAULT_MAX_LENGTH) required
+    nationality String minlength(DEFAULT_MIN_LENGTH) maxlength(DEFAULT_MAX_LENGTH)
+}
+
+entity Editorial {
+	name String minlength(DEFAULT_MIN_LENGTH) maxlength(DEFAULT_MAX_LENGTH) required
+    address String minlength(DEFAULT_MIN_LENGTH) maxlength(DEFAULT_MAX_LENGTH)minlength(DEFAULT_MIN_LENGTH) maxlength(DEFAULT_MAX_LENGTH)
+}
+
+// Relations
+
+relationship OneToMany {
+	Area{book} to Book{area(name) required}
+    Editorial{book} to Book{editorial(name)}
+    Country{book} to Book{country(name)}
+}
+
+relationship ManyToMany {
+	Book{author(name)} to Author{book}
+}
+
+// Set pagination options
+paginate Book with pagination
+
+// Set service options to all except few
+service all with serviceImpl

@@ -1,0 +1,67 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="book">
+            <h2><span jhiTranslate="libraryApp.book.detail.title">Book</span> {{book.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="libraryApp.book.title">Title</span></dt>
+                <dd>
+                    <span>{{book.title}}</span>
+                </dd>
+                <dt><span jhiTranslate="libraryApp.book.description">Description</span></dt>
+                <dd>
+                    <span>{{book.description}}</span>
+                </dd>
+                <dt><span jhiTranslate="libraryApp.book.isbn">Isbn</span></dt>
+                <dd>
+                    <span>{{book.isbn}}</span>
+                </dd>
+                <dt><span jhiTranslate="libraryApp.book.year">Year</span></dt>
+                <dd>
+                    <span>{{book.year}}</span>
+                </dd>
+                <dt><span jhiTranslate="libraryApp.book.language">Language</span></dt>
+                <dd>
+                    <span jhiTranslate="{{'libraryApp.Language.' + book.language}}">{{book.language}}</span>
+                </dd>
+                <dt><span jhiTranslate="libraryApp.book.author">Author</span></dt>
+                <dd>
+                    <span *ngFor="let author of book.authors; let last = last">
+                        <a [routerLink]="['/author', author?.id, 'view' ]">{{author.name}}</a>{{last ? '' : ', '}}
+                    </span>
+                </dd>
+                <dt><span jhiTranslate="libraryApp.book.area">Area</span></dt>
+                <dd>
+                    <div *ngIf="book.area">
+                        <a [routerLink]="['/area', book.area?.id, 'view']">{{book.area?.name}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="libraryApp.book.editorial">Editorial</span></dt>
+                <dd>
+                    <div *ngIf="book.editorial">
+                        <a [routerLink]="['/editorial', book.editorial?.id, 'view']">{{book.editorial?.name}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="libraryApp.book.country">Country</span></dt>
+                <dd>
+                    <div *ngIf="book.country">
+                        <a [routerLink]="['/country', book.country?.id, 'view']">{{book.country?.name}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/book', book.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>
