@@ -19,8 +19,8 @@ export class CountryService {
         return this.http.post<ICountry>(this.resourceUrl, country, { observe: 'response' });
     }
 
-    update(country: ICountry): Observable<EntityResponseType> {
-        return this.http.put<ICountry>(this.resourceUrl, country, { observe: 'response' });
+    update(id: number, country: ICountry): Observable<EntityResponseType> {
+        return this.http.put<ICountry>(`${this.resourceUrl}/${id}`, country, { observe: 'response' });
     }
 
     find(id: number): Observable<EntityResponseType> {
