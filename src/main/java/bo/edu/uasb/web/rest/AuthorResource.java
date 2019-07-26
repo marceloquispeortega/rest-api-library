@@ -51,8 +51,7 @@ public class AuthorResource {
         }
         Author result = authorService.save(author);
         return ResponseEntity.created(new URI("/api/authors/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString())).body(result);
     }
 
     /**
@@ -64,17 +63,18 @@ public class AuthorResource {
      * or with status 500 (Internal Server Error) if the author couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @PutMapping("/authors")
+    @PutMapping("/authors/{id}")
     @Timed
-    public ResponseEntity<Author> updateAuthor(@Valid @RequestBody Author author) throws URISyntaxException {
+    public ResponseEntity<Author> updateAuthor(@PathVariable Long id, @Valid @RequestBody Author author)
+            throws URISyntaxException {
         log.debug("REST request to update Author : {}", author);
-        if (author.getId() == null) {
+        if (id == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        author.setId(id);
         Author result = authorService.save(author);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, author.getId().toString()))
-            .body(result);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, author.getId().toString()))
+                .body(result);
     }
 
     /**
