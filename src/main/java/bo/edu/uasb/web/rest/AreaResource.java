@@ -78,6 +78,29 @@ public class AreaResource {
     }
 
     /**
+     * PATCH  /areas/:id : Updates an existing area.
+     *
+     * @param area the area to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated area,
+     * or with status 400 (Bad Request) if the area is not valid,
+     * or with status 500 (Internal Server Error) if the area couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PatchMapping("/areas/{id}")
+    @Timed
+    public ResponseEntity<Area> partialUpdateArea(@PathVariable Long id, @RequestBody Area area)
+            throws URISyntaxException {
+        log.debug("REST request to update Area : {}", area);
+        if (id == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        area.setId(id);
+        Area result = areaService.partialSave(area);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, area.getId().toString()))
+                .body(result);
+    }
+
+    /**
      * GET  /areas : get all the areas.
      *
      * @return the ResponseEntity with status 200 (OK) and the list of areas in body

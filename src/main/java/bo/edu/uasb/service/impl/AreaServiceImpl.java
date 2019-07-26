@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.util.List;
 import java.util.Optional;
+
 /**
  * Service Implementation for managing Area.
  */
@@ -35,7 +35,8 @@ public class AreaServiceImpl implements AreaService {
      */
     @Override
     public Area save(Area area) {
-        log.debug("Request to save Area : {}", area);        return areaRepository.save(area);
+        log.debug("Request to save Area : {}", area);
+        return areaRepository.save(area);
     }
 
     /**
@@ -49,7 +50,6 @@ public class AreaServiceImpl implements AreaService {
         log.debug("Request to get all Areas");
         return areaRepository.findAll();
     }
-
 
     /**
      * Get one area by id.
@@ -73,5 +73,30 @@ public class AreaServiceImpl implements AreaService {
     public void delete(Long id) {
         log.debug("Request to delete Area : {}", id);
         areaRepository.deleteById(id);
+    }
+
+    /**
+     * Save a area.
+     *
+     * @param area the entity to save
+     * @return the persisted entity
+     */
+    @Override
+    public Area partialSave(Area partialArea) {
+        log.debug("Request to save Area : {}", partialArea);
+        Optional<Area> area = areaRepository.findById(partialArea.getId());
+        if (partialArea.getCode() == null) {
+            partialArea.setCode(area.get().getCode());
+        }
+        if (partialArea.getName() == null) {
+            partialArea.setName(area.get().getName());
+        }
+        if (partialArea.getDescription() == null) {
+            partialArea.setDescription(area.get().getDescription());
+        }
+        if (partialArea.getBooks() == null) {
+            partialArea.setBooks(area.get().getBooks());
+        }
+        return areaRepository.save(partialArea);
     }
 }
