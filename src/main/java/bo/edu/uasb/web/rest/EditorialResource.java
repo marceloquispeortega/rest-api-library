@@ -44,15 +44,15 @@ public class EditorialResource {
      */
     @PostMapping("/editorials")
     @Timed
-    public ResponseEntity<Editorial> createEditorial(@Valid @RequestBody Editorial editorial) throws URISyntaxException {
+    public ResponseEntity<Editorial> createEditorial(@Valid @RequestBody Editorial editorial)
+            throws URISyntaxException {
         log.debug("REST request to save Editorial : {}", editorial);
         if (editorial.getId() != null) {
             throw new BadRequestAlertException("A new editorial cannot already have an ID", ENTITY_NAME, "idexists");
         }
         Editorial result = editorialService.save(editorial);
         return ResponseEntity.created(new URI("/api/editorials/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString())).body(result);
     }
 
     /**
@@ -64,17 +64,18 @@ public class EditorialResource {
      * or with status 500 (Internal Server Error) if the editorial couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @PutMapping("/editorials")
+    @PutMapping("/editorials/{id}")
     @Timed
-    public ResponseEntity<Editorial> updateEditorial(@Valid @RequestBody Editorial editorial) throws URISyntaxException {
+    public ResponseEntity<Editorial> updateEditorial(@PathVariable Long id, @Valid @RequestBody Editorial editorial)
+            throws URISyntaxException {
         log.debug("REST request to update Editorial : {}", editorial);
-        if (editorial.getId() == null) {
+        if (id == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        editorial.setId(id);
         Editorial result = editorialService.save(editorial);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, editorial.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, editorial.getId().toString())).body(result);
     }
 
     /**
