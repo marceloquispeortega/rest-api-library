@@ -46,7 +46,7 @@ export class AuthorUpdateComponent implements OnInit {
     save() {
         this.isSaving = true;
         if (this.author.id !== undefined) {
-            this.subscribeToSaveResponse(this.authorService.update(this.author));
+            this.subscribeToSaveResponse(this.authorService.update(this.author.id, this.author));
         } else {
             this.subscribeToSaveResponse(this.authorService.create(this.author));
         }

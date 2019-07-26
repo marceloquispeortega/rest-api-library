@@ -19,8 +19,8 @@ export class AuthorService {
         return this.http.post<IAuthor>(this.resourceUrl, author, { observe: 'response' });
     }
 
-    update(author: IAuthor): Observable<EntityResponseType> {
-        return this.http.put<IAuthor>(this.resourceUrl, author, { observe: 'response' });
+    update(id: number, author: IAuthor): Observable<EntityResponseType> {
+        return this.http.put<IAuthor>(`${this.resourceUrl}/${id}`, author, { observe: 'response' });
     }
 
     find(id: number): Observable<EntityResponseType> {
