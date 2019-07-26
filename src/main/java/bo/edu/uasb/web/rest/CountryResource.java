@@ -51,8 +51,7 @@ public class CountryResource {
         }
         Country result = countryService.save(country);
         return ResponseEntity.created(new URI("/api/countries/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString())).body(result);
     }
 
     /**
@@ -64,17 +63,18 @@ public class CountryResource {
      * or with status 500 (Internal Server Error) if the country couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @PutMapping("/countries")
+    @PutMapping("/countries/{id}")
     @Timed
-    public ResponseEntity<Country> updateCountry(@Valid @RequestBody Country country) throws URISyntaxException {
+    public ResponseEntity<Country> updateCountry(@PathVariable Long id, @Valid @RequestBody Country country)
+            throws URISyntaxException {
         log.debug("REST request to update Country : {}", country);
-        if (country.getId() == null) {
+        if (id == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        country.setId(id);
         Country result = countryService.save(country);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, country.getId().toString()))
-            .body(result);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, country.getId().toString()))
+                .body(result);
     }
 
     /**
