@@ -79,7 +79,7 @@ export class BookUpdateComponent implements OnInit {
     save() {
         this.isSaving = true;
         if (this.book.id !== undefined) {
-            this.subscribeToSaveResponse(this.bookService.update(this.book));
+            this.subscribeToSaveResponse(this.bookService.update(this.book.id, this.book));
         } else {
             this.subscribeToSaveResponse(this.bookService.create(this.book));
         }

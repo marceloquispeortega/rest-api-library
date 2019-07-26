@@ -40,7 +40,7 @@ describe('Service Tests', () => {
             });
 
             it('should update a Book', () => {
-                service.update(new Book(123)).subscribe(received => {
+                service.update(123, new Book(123)).subscribe(received => {
                     expect(received.body.id).toEqual(123);
                 });
 
